@@ -77,7 +77,7 @@ for param in z_parameters:
 num_examples = len(data) # 2264
 
 #collect train and test data
-partition = 0.883
+partition = 0.80
 train_data, test_data = subset_data(num_examples, partition)
 
 #set the correspondent test data
@@ -85,7 +85,7 @@ xss_train, yss_train = xss[train_data], yss[train_data]
 xss_test, yss_test = xss[test_data], yss[test_data] 
 
 
-batch_size = 32
+batch_size = 25
 learning_rate = .0001
 epochs = 1000
 momentum = 0.99
