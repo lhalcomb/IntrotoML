@@ -77,7 +77,7 @@ for param in z_parameters:
 num_examples = len(data) # 2264
 
 #collect train and test data
-partition = 0.883
+partition = 0.8
 train_data, test_data = subset_data(num_examples, partition)
 
 #set the correspondent test data
@@ -91,7 +91,7 @@ epochs = 1000
 momentum = 0.99
 
 
-
+""" 
 # train the model
 for epoch in range(epochs):
   #indices = torch.randperm(num_examples)
@@ -131,16 +131,16 @@ print_str = "epoch: {0}, loss: {1}".format(epoch+1, total_loss)
 
 #prints the proportion of the variance in the data explained by the regression hyperplane
 print(f'explained variation on {len(train_data)}, {partition * 100}% for the train data: {dulib.explained_var(model, (xss_train, yss_train))}')
-print(f'explained variation on {len(test_data)}, {100 - (partition * 100)}% for the test data: {dulib.explained_var(model, (xss_test, yss_test))}')
-""" 
+print(f'explained variation on {len(test_data)}, {100 - (partition * 100)}% for the test data: {dulib.explained_var(model, (xss_test, yss_test))}') """
+
 model = dulib.train(
   model, 
   crit = nn.MSELoss(),
   train_data=  (xss_train, yss_train),
   valid_data = (xss_test,  yss_test),
   #valid_metric = True,
-  learn_params = {'lr': 0.006,  'mo': 0.96},
-  epochs = 200,
+  learn_params = {'lr': 0.0001,  'mo': 0.99},
+  epochs = 300,
   bs = 25,
   graph = 1
-) """
+)
