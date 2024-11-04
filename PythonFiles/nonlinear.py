@@ -77,11 +77,7 @@ for param in z_parameters:
 num_examples = len(data) # 2264
 
 #collect train and test data
-<<<<<<< HEAD
-partition = 0.8
-=======
 partition = 0.80
->>>>>>> 2e1a7613c403e9fca9852629b99fb38a23c673d7
 train_data, test_data = subset_data(num_examples, partition)
 
 #set the correspondent test data
