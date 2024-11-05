@@ -53,16 +53,23 @@ yss = torch.Tensor(len(xss),1)
 for i in range(len(yss)):
   yss[i] = i//500
 
-learning_rate = 0.001
-epochs = 30
+#implementing momentum
+z_parameters = []
+for param in model.parameters():
+  z_parameters.append(param.data.clone())
+for param in z_parameters:
+  param.zero_()
+
+learning_rate = 0.0001
+epochs = 1500
 batchsize = 32
 
 num_example = len(xss) #1000 inputs
 
 #beginning implementation of momentum
-momentum = 0
+momentum = 0.9
 
-
+""" 
 for epoch in range(epochs):  # train the model
 
   accum_loss = 0
@@ -93,14 +100,14 @@ for epoch in range(epochs):  # train the model
     loss.backward() # compute the gradient of the loss function w/r to the weights
 
     #adjust the weights
-    for param in model.parameters():
-      param.data.sub_(param.grad.data * learning_rate) #w_i^{k+1} = w_i^{k} - alpha * grad(w_i^{k})
-      #print(param.grad.data * learning_rate)
+    for i, (z_param, param) in enumerate(zip(z_parameters, model.parameters())):
+      z_parameters[i] = momentum * z_param + param.grad.data
+      param.data.sub_(z_parameters[i] * learning_rate)
   
   print("epoch: {0}, current loss: {1}".format(epoch+1, accum_loss/(num_example//batchsize))) 
 
 # extract the weights and bias into a list
-params = list(model.parameters())
+params = list(model.parameters()) """
 
 
 def pct_correct(yhatss, yss):
@@ -119,14 +126,14 @@ def pct_correct(yhatss, yss):
   return 100*count/len(yss)
 
 
-""" model = dulib.train(
+model = dulib.train(
         model = model,
         crit = criterion,
         train_data = (xss, yss),
         valid_metric = pct_correct,
         learn_params = {'lr': learning_rate, 'mo':  momentum},
         bs =  batchsize, 
-        epochs = 100
+        epochs = 998
 
-) """
+)
 print("Percentage correct:", pct_correct(model(xss), yss))
