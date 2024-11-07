@@ -51,7 +51,7 @@ xss, xss_stds = dulib.normalize(xss)
 # generate yss to hold the correct classification for each example
 yss = torch.Tensor(len(xss),1)
 for i in range(len(yss)):
-  yss[i] = i//500
+  yss[i] = i//500 + 8
 
 #implementing momentum
 z_parameters = []
@@ -69,7 +69,7 @@ num_example = len(xss) #1000 inputs
 #beginning implementation of momentum
 momentum = 0.9
 
-""" 
+
 for epoch in range(epochs):  # train the model
 
   accum_loss = 0
@@ -107,7 +107,7 @@ for epoch in range(epochs):  # train the model
   print("epoch: {0}, current loss: {1}".format(epoch+1, accum_loss/(num_example//batchsize))) 
 
 # extract the weights and bias into a list
-params = list(model.parameters()) """
+params = list(model.parameters())
 
 
 def pct_correct(yhatss, yss):
@@ -126,14 +126,45 @@ def pct_correct(yhatss, yss):
   return 100*count/len(yss)
 
 
-model = dulib.train(
+def printDeClassifiedDigit(yhatss, yss, xss_original):
+  zero  = torch.min(yss).item() #8
+  eight = torch.max(yss).item() #9
+
+  th =  1e-3 # threshold  
+  cutoff = (zero+eight)/2
+
+  misclassified_indicies = []
+
+  for idx, (yhats, ys) in enumerate(zip(yhatss, yss)):
+    yhat = yhats.item()
+    y = ys.item()
+    if (yhat>cutoff and abs(y-eight)<th) or (yhat<cutoff and abs(y-zero)<th):
+      misclassified_indicies.append(idx)
+
+  print(len(misclassified_indicies))
+  quit()
+    
+  
+  set_printoptions(linewidth=100)
+  for idx in misclassified_indicies:
+    print(f"\nMisclassified digit at index {idx}:")
+    print(xss_original[idx].reshape(20, 20).numpy().astype(int))
+
+  
+  
+
+
+
+""" model = dulib.train(
         model = model,
         crit = criterion,
         train_data = (xss, yss),
         valid_metric = pct_correct,
         learn_params = {'lr': learning_rate, 'mo':  momentum},
         bs =  batchsize, 
-        epochs = 998
+        epochs = 1000
 
-)
+) """
 print("Percentage correct:", pct_correct(model(xss), yss))
+
+printDeClassifiedDigit(model(xss), yss, xss)
