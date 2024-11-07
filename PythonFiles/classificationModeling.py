@@ -4,6 +4,7 @@ import torch.nn as nn
 import du.lib  as dulib
 from skimage import io
 from numpy import set_printoptions
+from matplotlib import pyplot as plt
 
 
 
@@ -134,6 +135,7 @@ def printDeClassifiedDigit(yhatss, yss, xss_original):
   cutoff = (zero + eight)/2
 
   classified_indicies = []
+  misclassified_digits = []
 
   for idx, (yhats, ys) in enumerate(zip(yhatss, yss)):
     yhat = yhats.item()
@@ -142,8 +144,16 @@ def printDeClassifiedDigit(yhatss, yss, xss_original):
       classified_indicies.append(idx)
     else: 
       set_printoptions(linewidth=100)
+
       print(f"\nMisclassified digit at index {idx}:")
-      print(xss_original[idx].reshape(20, 20).numpy().astype(int) * xss_stds + xss_means)
+      
+      """* xss_stds + xss_means"""
+
+      misclassified = ( xss_original[idx]  ).reshape(20, 20).numpy().astype(int)
+      print(misclassified)
+      misclassified_digits.append(misclassified)
+
+  return misclassified, misclassified_digits
 
   
   
@@ -162,4 +172,12 @@ def printDeClassifiedDigit(yhatss, yss, xss_original):
 ) """
 print("Percentage correct:", pct_correct(model(xss), yss))
 
-printDeClassifiedDigit(model(xss), yss, xss)
+misclassified, misclassified_digits = printDeClassifiedDigit(model(xss), yss, xss)
+
+figure, subplots = plt.subplots(1, len(misclassified_digits), squeeze=False)
+
+for i in range(len(misclassified_digits)):
+    subplots[0][i].imshow(misclassified_digits[i], cmap='gray')
+    subplots[0][i].set_axis_off()
+
+plt.show()
