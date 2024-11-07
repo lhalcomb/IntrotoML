@@ -131,24 +131,19 @@ def printDeClassifiedDigit(yhatss, yss, xss_original):
   eight = torch.max(yss).item() #9
 
   th =  1e-3 # threshold  
-  cutoff = (zero+eight)/2
+  cutoff = (zero + eight)/2
 
-  misclassified_indicies = []
+  classified_indicies = []
 
   for idx, (yhats, ys) in enumerate(zip(yhatss, yss)):
     yhat = yhats.item()
     y = ys.item()
-    if (yhat>cutoff and abs(y-eight)<th) or (yhat<cutoff and abs(y-zero)<th):
-      misclassified_indicies.append(idx)
-
-  print(len(misclassified_indicies))
-  quit()
-    
-  
-  set_printoptions(linewidth=100)
-  for idx in misclassified_indicies:
-    print(f"\nMisclassified digit at index {idx}:")
-    print(xss_original[idx].reshape(20, 20).numpy().astype(int))
+    if (yhat > cutoff and abs(y - eight) < th ) or (yhat < cutoff and abs(y - zero)<th):
+      classified_indicies.append(idx)
+    else: 
+      set_printoptions(linewidth=100)
+      print(f"\nMisclassified digit at index {idx}:")
+      print(xss_original[idx].reshape(20, 20).numpy().astype(int) )
 
   
   
