@@ -146,10 +146,10 @@ def printDeClassifiedDigit(yhatss, yss, xss_original):
       set_printoptions(linewidth=100)
 
       print(f"\nMisclassified digit at index {idx}:")
-      
-      """* xss_stds + xss_means"""
 
-      misclassified = ( xss_original[idx]  ).reshape(20, 20).numpy().astype(int)
+      
+      misclassified = (xss_original[idx] * xss_stds + xss_means).reshape(20, 20).numpy().astype(int)
+      #misclassified = (xss_original[idx]).reshape(20, 20).numpy().astype(int)
       print(misclassified)
       misclassified_digits.append(misclassified)
 
