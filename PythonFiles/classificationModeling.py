@@ -23,7 +23,9 @@ class LinearModel(nn.Module):  # create the model class, subclassing nn.Module
 
    def forward(self, x):
      x = self.layer1(x)
-     return x
+     return torch.sigmoid(x)
+   
+   
 
 model = LinearModel() # create an instance of the model class
 
@@ -52,8 +54,7 @@ xss, xss_stds = dulib.normalize(xss)
 # generate yss to hold the correct classification for each example
 yss = torch.Tensor(len(xss),1)
 for i in range(len(yss)):
-  yss[i] = i//500 + 8
-
+  yss[i] = i//500
 #implementing momentum
 z_parameters = []
 for param in model.parameters():
@@ -61,8 +62,8 @@ for param in model.parameters():
 for param in z_parameters:
   param.zero_()
 
-learning_rate = 0.0001
-epochs = 1500
+learning_rate = 0.01
+epochs = 1000
 batchsize = 32
 
 num_example = len(xss) #1000 inputs
@@ -145,7 +146,7 @@ def printDeClassifiedDigit(yhatss, yss, xss_original):
     else: 
       set_printoptions(linewidth=100)
 
-      print(f"\nMisclassified digit at index {idx}:")
+      print(f"\nMisclassified digit at index {idx}, {yss[idx]}:")
 
       
       misclassified = (xss_original[idx] * xss_stds + xss_means).reshape(20, 20).numpy().astype(int)
@@ -172,12 +173,19 @@ def printDeClassifiedDigit(yhatss, yss, xss_original):
 ) """
 print("Percentage correct:", pct_correct(model(xss), yss))
 
-misclassified, misclassified_digits = printDeClassifiedDigit(model(xss), yss, xss)
+correct_pct = pct_correct(model(xss),yss)
 
-figure, subplots = plt.subplots(1, len(misclassified_digits), squeeze=False)
+if correct_pct == 100:
+  print("Model is 100% correct, there are no misclassified digits")
+else:
+  misclassified, misclassified_digits = printDeClassifiedDigit(model(xss), yss, xss)
 
-for i in range(len(misclassified_digits)):
-    subplots[0][i].imshow(misclassified_digits[i], cmap='gray')
-    subplots[0][i].set_axis_off()
 
-plt.show()
+
+  figure, subplots = plt.subplots(1, len(misclassified_digits), squeeze=False)
+
+  for i in range(len(misclassified_digits)):
+      subplots[0][i].imshow(misclassified_digits[i], cmap='gray')
+      subplots[0][i].set_axis_off()
+
+  plt.show()
