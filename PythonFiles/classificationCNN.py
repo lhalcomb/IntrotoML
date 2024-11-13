@@ -15,6 +15,7 @@ class LogSoftmaxModel(nn.Module):
 
     def forward(self, x):
         x = self.layer1(x)
+        #x = torch.sigmoid(x)
         x = torch.relu(x)
         x = self.layer2(x)
         return torch.log_softmax(x, dim=1)
@@ -80,13 +81,12 @@ train_data, test_data = subset_data(num_example, partition)
 xss_train, yss_train = xss[train_data], yss[train_data]
 xss_test, yss_test = xss[test_data], yss[test_data] 
 
-
-
 #beginning implementation of momentum
 momentum = 0.9
 
 
-""" for epoch in range(epochs):  # train the model
+""" 
+for epoch in range(epochs):  # train the model
 
   accum_loss = 0
   indicies = torch.randperm(num_example) #creates a random permutation of the example list
@@ -136,18 +136,16 @@ model = dulib.train(
         epochs = 100
 )
 
-count = 0
+""" count = 0
 for i in range(len(xss_test)):
   if  torch.argmax(model(xss_test[i].unsqueeze(0))).item() == yss_test[i].item():
-    count += 1
+    count += 1 """
 
 #correct on train set
-print("Percentage correct on train set:",100*count/len(xss_train))
-pct_train = dulib.class_accuracy(model, (xss_train, yss_train), show_cm=True)
-print(f"Percentage correct on testing data: {100*pct_train:.2f}")
+pct_train = dulib.class_accuracy(model, (xss_train, yss_train), show_cm=False)
+print(f"Percentage correct on training data: {100*pct_train:.2f}")
 
 #correct on test set
-print("Percentage correct on test set:",100*count/len(xss_test))
 pct_test = dulib.class_accuracy(model, (xss_test, yss_test), show_cm=True)
 print(f"Percentage correct on testing data: {100*pct_test:.2f}")
 
