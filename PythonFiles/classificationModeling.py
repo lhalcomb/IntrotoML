@@ -24,8 +24,7 @@ class LinearModel(nn.Module):  # create the model class, subclassing nn.Module
    def forward(self, x):
      x = self.layer1(x)
      return torch.sigmoid(x)
-   
-   
+
 
 model = LinearModel() # create an instance of the model class
 
