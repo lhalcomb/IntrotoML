@@ -68,8 +68,8 @@ for param in z_parameters:
   param.zero_()
 
 learning_rate = 0.0001
-epochs = 100
-batchsize = 32
+epochs = 512
+batchsize = 16
 
 num_example = len(xss) #5000 inputs
 
@@ -133,7 +133,8 @@ model = dulib.train(
         valid_data = (xss_test, yss_test),
         learn_params = {'lr': learning_rate, 'mo':  momentum},
         bs =  batchsize, 
-        epochs = 100
+        epochs = epochs, 
+        
 )
 
 """ count = 0
