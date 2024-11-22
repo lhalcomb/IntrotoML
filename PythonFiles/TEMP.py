@@ -6,7 +6,7 @@ import du.lib as dulib
 import math
 import random
 
-digits = io.imread('digits.png')
+digits = io.imread('./assignfiles/digits.png')
 xss_init = torch.Tensor(5000, 400)
 idx = 0
 for i in range(0, 1000, 20):
