@@ -53,9 +53,9 @@ for param in model.parameters():
 for param in z_parameters:
   param.zero_()
 
-learning_rate = 0.001
+learning_rate = 0.0001
 epochs = 1000
-batchsize = 32
+batchsize = 16
 
 num_example = len(xss) #1000 inputs
 
