@@ -7,14 +7,6 @@ from numpy import set_printoptions
 from matplotlib import pyplot as plt
 
 
-
-digits = io.imread('./assignfiles/digits.png')  # digits is now a numpy ndarray
-
-""" xs = digits[:20,:20] #  xs is now a numpy ndarray of shape 20x20
-
-set_printoptions(linewidth=100)
-print(xs.flatten()) """
-
 class LinearModel(nn.Module):  # create the model class, subclassing nn.Module
 
    def __init__(self):
@@ -23,7 +15,7 @@ class LinearModel(nn.Module):  # create the model class, subclassing nn.Module
 
    def forward(self, x):
      x = self.layer1(x)
-     return torch.sigmoid(x)
+     return torch.relu(x)
 
 
 model = LinearModel() # create an instance of the model class
@@ -61,7 +53,7 @@ for param in model.parameters():
 for param in z_parameters:
   param.zero_()
 
-learning_rate = 0.01
+learning_rate = 0.001
 epochs = 1000
 batchsize = 32
 
