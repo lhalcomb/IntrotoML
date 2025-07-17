@@ -55,7 +55,7 @@ def subset_data(num_examples, partition):
 
 
 # read in all of the digits
-digits = io.imread('./assignfiles/digits.png')
+digits = io.imread('/Users/laydenhalcomb/IntroToMLRepo/IntrotoML/assignfiles/digits.png')
 xss = torch.Tensor(5000, 20, 20)
 idx = 0
 for i in range(0, 1000, 20):
@@ -163,6 +163,34 @@ print(f"Percentage correct on training data: {100*pct_train:.2f}")
 #correct on test set
 pct_test = dulib.class_accuracy(model, (xss_test, yss_test), show_cm=True)
 print(f"Percentage correct on testing data: {100*pct_test:.2f}")
+
+# Evaluate model predictions on test set
+model.eval()  # Set the model to evaluation mode
+misclassified = []
+
+for i in range(len(xss_test)):
+    image = xss_test[i].unsqueeze(0)  # Add batch dimension
+    pred = torch.argmax(model(image)).item()
+    actual = yss_test[i].item()
+    
+    if pred != actual:
+        misclassified.append((image.squeeze().numpy(), pred, actual))  # remove extra dims
+
+# Show a few misclassified images
+print(f"Total misclassified images: {len(misclassified)}")
+
+# Display up to 10 misclassified examples
+num_to_show = min(10, len(misclassified))
+plt.figure(figsize=(12, 6))
+for i in range(num_to_show):
+    img, pred, actual = misclassified[i]
+    plt.subplot(2, 5, i+1)
+    plt.imshow(img, cmap='gray')
+    plt.title(f'Pred: {pred}, Actual: {actual}')
+    plt.axis('off')
+
+plt.tight_layout()
+plt.show()
 
 
 
