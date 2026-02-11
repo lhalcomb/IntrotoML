@@ -38,6 +38,17 @@ model = ConvolutionalModel()
 # set the criterion
 criterion = nn.NLLLoss()
 
+# meta_layer1 = nn.Sequential(
+#     nn.Conv2d(in_channels=1, out_channels=16, kernel_size=5, stride=1, padding = 2),
+#     nn.ReLU(),
+#     nn.MaxPool2d(kernel_size = 2, stride = 2, padding = 0)
+# )
+
+# for name, parameter in meta_layer1.named_parameters():
+#   print(name, parameter.size())
+
+
+
 
 def subset_data(num_examples, partition):
   # partition the data into training and test sets
@@ -139,6 +150,7 @@ for epoch in range(epochs):  # train the model
 # extract the weights and bias into a list
 params = list(model.parameters()) """
 
+print(f"The lengths for: \n xss_train: {len(xss_train)}, yss_train: {len(yss_train)}, xss_test: {len(xss_test)}, yss_test: {len(yss_test)}")
 
 model = dulib.train(
         model = model,

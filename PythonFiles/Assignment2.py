@@ -2,7 +2,7 @@ import torch
 import csv
 import matplotlib.pyplot as plt
 
-with open('assignfiles/assign2.csv') as csvfile:
+with open('/Users/laydenhalcomb/IntroToMLRepo/IntrotoML/assignfiles/assign2.csv') as csvfile:
     reader = csv.reader(csvfile, delimiter = ',')
     next(csvfile) #skip the first line
     xs, ys = [], []
@@ -17,6 +17,7 @@ xTensor = torch.ones(60,2)
 
 xTensor[:, 1] = xs
 
+
 omegaWeights = xTensor.transpose(0,1).mm(xTensor).inverse().mm(xTensor.transpose(0,1)).mm(ys)
 
 
@@ -29,6 +30,7 @@ if __name__ == "__main__":
     print(ys)
     print(xs)
     """
+    print(xTensor)
     print(omegaWeights)
 
 

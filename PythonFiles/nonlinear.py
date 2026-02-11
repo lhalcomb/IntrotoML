@@ -17,7 +17,7 @@ import du.lib  as dulib
 names = ['SalePrice','1st_Flr_SF','2nd_Flr_SF','Lot_Area','Overall_Qual',
     'Overall_Cond','Year_Built','Year_Remod/Add','BsmtFin_SF_1','Total_Bsmt_SF',
     'Gr_Liv_Area','TotRms_AbvGrd','Bsmt_Unf_SF','Full_Bath']
-df = pd.read_csv('assignfiles/AmesHousing.csv', names = names)
+df = pd.read_csv('/Users/laydenhalcomb/IntroToMLRepo/IntrotoML/assignfiles/AmesHousing.csv', names = names)
 data = df.values # read data into a numpy array (as a list of lists)
 data = data[1:] # remove the first list which consists of the labels
 data = data.astype(float) # coerce the entries in the numpy array to floats
@@ -42,8 +42,8 @@ class NonLinearModel(nn.Module):
   def forward(self, xss):
     
     xss = self.layer1(xss)
-    xss = torch.relu(xss)
-    #xss = torch.sigmoid(xss)
+    #xss = torch.relu(xss)
+    xss = torch.sigmoid(xss)
 
     return self.layer2(xss)
   
@@ -52,7 +52,6 @@ def subset_data(num_examples, partition):
 
   train_size = int(num_examples * partition)
   indices = torch.randperm(num_examples)
-
   #with partition = 0.8
   train_data = indices[:train_size] # 80% 
   test_data =  indices[train_size:] # 20%
@@ -91,7 +90,7 @@ epochs = 1000
 momentum = 0.99
 
 
-""" 
+
 # train the model
 for epoch in range(epochs):
   #indices = torch.randperm(num_examples)
@@ -131,7 +130,7 @@ print_str = "epoch: {0}, loss: {1}".format(epoch+1, total_loss)
 
 #prints the proportion of the variance in the data explained by the regression hyperplane
 print(f'explained variation on {len(train_data)}, {partition * 100}% for the train data: {dulib.explained_var(model, (xss_train, yss_train))}')
-print(f'explained variation on {len(test_data)}, {100 - (partition * 100)}% for the test data: {dulib.explained_var(model, (xss_test, yss_test))}') """
+print(f'explained variation on {len(test_data)}, {100 - (partition * 100)}% for the test data: {dulib.explained_var(model, (xss_test, yss_test))}') 
 
 model = dulib.train(
   model, 
